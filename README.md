@@ -32,8 +32,8 @@ npm install -g expo-cli
 ### 2. Clone & Install
 
 ```bash
-git clone https://github.com/your-org/car-distribution-app.git
-cd car-distribution-app
+git clone git@github.com:ThaeNandarSeint/Car-Distribution-App.git
+cd Car-Distribution-App
 npm install
 ```
 
@@ -47,7 +47,7 @@ cp .env.example .env
 `.env` file:
 ```
 EXPO_PUBLIC_SUPABASE_URL=https://your-project-id.supabase.co
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
+EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### 4. Supabase Database Setup
@@ -257,3 +257,94 @@ car-distribution-app/
 ├── tailwind.config.js           ← Tailwind theme
 └── tsconfig.json
 ```
+
+---
+
+# Technical Debt
+
+The following items are known technical debts that should be addressed in future iterations to improve scalability, maintainability, and code quality.
+
+## Authentication
+
+Currently the application relies mainly on Supabase public access with an anonymous key for API communication.
+
+### Limitations
+- No explicit authentication flow implemented in the mobile app.
+- Role-based access control for inspectors is not enforced at the application level.
+- Supabase policies may need additional refinement for production-grade security.
+
+### Planned Improvements
+- Implement Supabase Auth for inspector login.
+- Add JWT-based session handling in the mobile app.
+- Configure Row Level Security (RLS) policies to restrict data access by user.
+- Add session persistence and secure token storage.
+
+## Feature-Based Folder Structure
+
+The current project structure mixes shared components and domain logic. As the project grows, this can make maintenance more difficult.
+
+### Planned Refactor
+
+Adopt a feature-based architecture where each domain manages its own logic.
+
+Example:
+
+```
+features/
+  vehicles/
+    components/
+    hooks/
+    services/
+    store/
+    screens/
+
+  sync/
+    components/
+    services/
+    hooks/
+```
+
+### Benefits
+- Clear domain separation
+- Better scalability
+- Easier testing
+- Reduced cross-module dependency
+
+## End-to-End (E2E) Testing
+
+The project currently lacks automated end-to-end testing coverage.
+
+### Current Limitations
+- Critical workflows are tested manually.
+- Risk of regression when deploying updates.
+
+### Planned Improvements
+Add E2E tests for:
+
+- Vehicle arrival submission
+- Offline queue storage
+- Sync retry after reconnection
+- Duplicate VIN validation
+- Fleet list rendering
+
+Recommended tools:
+- Detox
+- Playwright
+- Cypress
+
+## Update and Delete Features
+
+The current system focuses mainly on vehicle creation and offline sync. Update and delete capabilities are not yet implemented.
+
+### Planned Improvements
+- Implement vehicle update functionality.
+- Add safe delete functionality with confirmation.
+- Introduce soft delete (`deleted_at`) in the database.
+- Ensure delete operations respect offline sync and idempotency logic.
+
+## Additional Future Improvements
+
+- Increase unit test coverage
+- Integrate error monitoring (e.g., Sentry)
+- Improve CI/CD validation
+- Add code coverage reporting

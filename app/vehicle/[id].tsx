@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View, Text, ScrollView, ActivityIndicator, TouchableOpacity,
+  View, Text, ScrollView, ActivityIndicator, TouchableOpacity, Platform,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +9,8 @@ import { vehicleApi } from '../../services/api';
 import { useVehicleStore } from '../../store/vehicleStore';
 import { StatusBadge } from '../../components/StatusBadge';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
+
+const monoStyle = { fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace' } as const;
 
 function VehicleDetailInner() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -54,8 +56,11 @@ function VehicleDetailInner() {
   const isLocal = vehicle.id.startsWith('local-');
 
   return (
-    <ScrollView className="flex-1 bg-base" contentContainerStyle={{ padding: 16, paddingBottom: 48 }}
-      showsVerticalScrollIndicator={false}>
+    <ScrollView
+      className="flex-1 bg-base"
+      contentContainerStyle={{ padding: 16, paddingBottom: 48 }}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Hero */}
       <View className="bg-surface border border-border rounded-3xl p-6 mb-4 flex-row justify-between items-start">
         <View className="flex-1">
@@ -78,7 +83,7 @@ function VehicleDetailInner() {
       {/* VIN */}
       <View className="bg-elevated border border-border rounded-xl p-4 mb-4">
         <Text className="text-[10px] text-muted font-bold uppercase tracking-widest mb-1">VIN</Text>
-        <Text className="text-lg text-primary font-mono tracking-widest">{vehicle.vin}</Text>
+        <Text className="text-lg text-primary tracking-widest" style={monoStyle}>{vehicle.vin}</Text>
       </View>
 
       <DetailSection title="Technical Specifications">
@@ -93,8 +98,10 @@ function VehicleDetailInner() {
       <DetailSection title="Yard & Logistics">
         <DetailRow icon="📍" label="Location" value={vehicle.location} />
         <DetailRow icon="🏷️" label="Lot Number" value={vehicle.lot_number} />
-        <DetailRow icon="📅" label="Arrival Date"
-          value={vehicle.arrival_date ? new Date(vehicle.arrival_date).toLocaleDateString() : '—'} />
+        <DetailRow
+          icon="📅" label="Arrival Date"
+          value={vehicle.arrival_date ? new Date(vehicle.arrival_date).toLocaleDateString() : '—'}
+        />
         <DetailRow icon="👤" label="Inspector" value={vehicle.inspector_id ?? 'Unassigned'} last />
       </DetailSection>
 
@@ -105,8 +112,10 @@ function VehicleDetailInner() {
       ) : null}
 
       <DetailSection title="Record Info">
-        <DetailRow icon="🕐" label="Created"
-          value={vehicle.created_at ? new Date(vehicle.created_at).toLocaleString() : '—'} />
+        <DetailRow
+          icon="🕐" label="Created"
+          value={vehicle.created_at ? new Date(vehicle.created_at).toLocaleString() : '—'}
+        />
         <DetailRow icon="🔑" label="Idempotency Key" value={vehicle.idempotency_key || '—'} mono last />
       </DetailSection>
     </ScrollView>
@@ -132,7 +141,8 @@ function DetailRow({ icon, label, value, mono, last }: {
         <Text className="text-sm text-secondary font-medium">{label}</Text>
       </View>
       <Text
-        className={`text-sm font-semibold text-primary max-w-[50%] text-right capitalize ${mono ? 'font-mono text-[10px] text-muted' : ''}`}
+        className="text-sm font-semibold text-primary max-w-[50%] text-right capitalize"
+        style={mono ? { ...monoStyle, fontSize: 10, color: '#55556A' } : undefined}
         numberOfLines={2}
       >
         {value}

@@ -150,6 +150,7 @@ function NewArrivalInner() {
           ]
         );
       }
+      router.push('/')
     } catch (err) {
       // Fallback to queue on any network failure
       await syncQueueService.enqueue(form, idempotency_key);
@@ -161,7 +162,7 @@ function NewArrivalInner() {
       );
     } finally {
       setSubmitting(false);
-      router.push('/')
+      
     }
   };
 

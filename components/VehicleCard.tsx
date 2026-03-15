@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { Vehicle } from '../types';
 import { StatusBadge } from './StatusBadge';
 
@@ -12,10 +12,12 @@ const FUEL_ICONS: Record<string, string> = {
   gasoline: '⛽', diesel: '🛢️', electric: '⚡', hybrid: '🌿', plug_in_hybrid: '🔌',
 };
 
+const monoStyle = { fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace' } as const;
+
 export const VehicleCard = memo(function VehicleCard({ vehicle, onPress }: VehicleCardProps) {
   return (
     <TouchableOpacity
-      className="bg-surface rounded-2xl p-4 mx-4 mb-2.5 border border-border active:opacity-75"
+      className="bg-surface rounded-2xl p-4 mx-4 mb-2.5 border border-border"
       onPress={() => onPress(vehicle)}
       activeOpacity={0.75}
     >
@@ -31,7 +33,7 @@ export const VehicleCard = memo(function VehicleCard({ vehicle, onPress }: Vehic
         <StatusBadge status={vehicle.status} size="sm" />
       </View>
 
-      <Text className="text-[11px] text-muted font-mono tracking-wider mb-2.5">
+      <Text className="text-[11px] text-muted tracking-wider mb-2.5" style={monoStyle}>
         {vehicle.vin}
       </Text>
 

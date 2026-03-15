@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  // NativeWind v4 requires darkMode: 'class'
   darkMode: 'class',
   content: [
     './app/**/*.{js,jsx,ts,tsx}',
@@ -23,18 +22,17 @@ module.exports = {
           DEFAULT: '#F5A623',
           dark:    '#D4891A',
         },
-        // Status colors
         transit:   '#3B82F6',
         arrived:   '#10B981',
         inspected: '#8B5CF6',
         released:  '#06B6D4',
         hold:      '#F59E0B',
         damaged:   '#EF4444',
-        // Text
         primary:   '#F1F1F8',
         secondary: '#8888A8',
         muted:     '#55556A',
       },
+      // No custom fontFamily — avoids "not loaded through expo-font" warnings
     },
   },
   plugins: [],

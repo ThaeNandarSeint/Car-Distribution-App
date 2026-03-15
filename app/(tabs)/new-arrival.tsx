@@ -161,6 +161,7 @@ function NewArrivalInner() {
       );
     } finally {
       setSubmitting(false);
+      router.push('/')
     }
   };
 
